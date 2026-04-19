@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyber Wishes AI Pro</title>
+
+<style>
+body{
+margin:0;
+background:black;
+font-family:monospace;
+overflow:hidden;
+color:#00ffcc;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+}
+
+.container{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+z-index:2;
+text-align:center;
+}
+
+.glow-btn{
+padding:15px 30px;
+background:transparent;
+border:2px solid #00ffcc;
+color:#00ffcc;
+cursor:pointer;
+box-shadow:0 0 15px #00ffcc;
+font-size:18px;
+}
+
+.glow-btn:hover{
+background:#00ffcc;
+color:black;
+box-shadow:0 0 40px #00ffcc;
+}
+
+.popup{
+display:none;
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:rgba(0,0,0,0.95);
+border:2px solid #00ffcc;
+padding:25px;
+text-align:center;
+box-shadow:0 0 30px #00ffcc;
+z-index:10;
+width:300px;
+}
+
+input{
+padding:10px;
+background:black;
+border:1px solid #00ffcc;
+color:#00ffcc;
+width:90%;
+}
+
+.hidden{display:none;}
+
+#text{
+min-height:80px;
+margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+<button class="glow-btn" onclick="openPopup()">Rayhan 🔥 Click Karo</button>
+</div>
+
+<div class="popup" id="popup">
+
+<div id="step1">
+<h3>Enter Your Name</h3>
+<input id="name">
+<br><br>
+<button class="glow-btn" onclick="start()">Enter</button>
+</div>
+
+<div id="step2" class="hidden">
+<div id="text"></div>
+</div>
+
+<div id="step3" class="hidden">
+<h3 id="finalText"></h3>
+</div>
+
+<div id="step4" class="hidden">
+<h3 id="hackName"></h3>
+<button class="glow-btn" onclick="reset()">Restart</button>
+</div>
+
+</div>
+
+<script>
+
+/* ---------- SOUND ENGINE ---------- */
+function beep(freq,duration){
+let ctx = new (window.AudioContext || window.webkitAudioContext)();
+let osc = ctx.createOscillator();
+let gain = ctx.createGain();
+
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+osc.frequency.value = freq;
+osc.type = "square";
+
+osc.start();
+gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+osc.stop(ctx.currentTime + duration);
+}
+
+/* ---------- MATRIX ---------- */
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+let letters="01CYBERHACKPYTHONAI";
+letters=letters.split("");
+
+let font=14;
+let cols=canvas.width/font;
+let drops=[];
+for(let i=0;i<cols;i++)drops[i]=1;
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ffcc";
+ctx.font=font+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+let t=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(t,i*font,drops[i]*font);
+
+if(drops[i]*font>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+}
+}
+setInterval(draw,30);
+
+/* ---------- UI ---------- */
+function openPopup(){
+beep(600,0.1);
+document.getElementById("popup").style.display="block";
+}
+
+/* ---------- TYPE EFFECT ---------- */
+function typeText(text,el,cb){
+let i=0;
+el.innerHTML="";
+let speed=setInterval(()=>{
+el.innerHTML+=text[i];
+beep(300,0.03);
+i++;
+if(i>=text.length){
+clearInterval(speed);
+if(cb)cb();
+}
+},50);
+}
+
+/* ---------- FLOW ---------- */
+function start(){
+
+let name=document.getElementById("name").value;
+if(name=="")name="Guest";
+
+document.getElementById("step1").classList.add("hidden");
+document.getElementById("step2").classList.remove("hidden");
+
+/* CELEBRATION */
+beep(800,0.1);
+setTimeout(()=>beep(900,0.1),200);
+setTimeout(()=>beep(1000,0.1),400);
+
+/* TEXT 1 */
+setTimeout(()=>{
+typeText("💥 BOOM! POP POP FIREWORKS 💥",document.getElementById("text"),()=>{
+
+setTimeout(()=>{
+document.getElementById("step2").classList.add("hidden");
+document.getElementById("step3").classList.remove("hidden");
+
+typeText("🎉 Best Wishes for Learning Python 🚀",document.getElementById("finalText"),()=>{
+
+setTimeout(()=>{
+document.getElementById("step3").classList.add("hidden");
+document.getElementById("step4").classList.remove("hidden");
+
+let hack="H4CK3R_"+name.toUpperCase().split("").join("");
+
+typeText("💀 Hacker Identity: "+hack,document.getElementById("hackName"));
+
+},2000);
+
+});
+
+},2000);
+
+});
+},1000);
+
+}
+
+/* RESET */
+function reset(){
+location.reload();
+}
+
+</script>
+
+</body>
+</html>
